@@ -46,9 +46,27 @@ void setLed(uint8_t state)
        //delay(10);
 }                    
 void loop()
-{
-  buttonL = digitalRead(button1);
-  buttonR = digitalRead(button2);
-  if (buttonL == 0)
-  if ()
+     {
+   int BUTTOONpull1 = digitalRead(BUTTON1);
+   int BUTTOONpull2 = digitalRead(BUTTON2);
+
+   if (BUTTOONpull1==0)
+   {
+   j++;
+   }
+   if (BUTTOONpull2==0)
+   {
+   j--;
+   }
+   if (j>9)
+   {
+    j=0; //start at 0
+   }
+   if (j<0)
+   {
+    j=9; //start at 9
+   }
+   setLed(map7sec[j]);
+   //delay(100);
+    
 }
