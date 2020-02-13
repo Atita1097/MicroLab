@@ -47,14 +47,14 @@ void setLed(uint8_t state)
 }                    
 void loop()
      {
-   int BUTTOONpull1 = digitalRead(BUTTON1);
-   int BUTTOONpull2 = digitalRead(BUTTON2);
+   int BUTTONpull1 = digitalRead(button1);
+   int BUTTONpull2 = digitalRead(button2);
 
-   if (BUTTOONpull1==0)
+   if (BUTTONpull1==0)
    {
    j++;
    }
-   if (BUTTOONpull2==0)
+   if (BUTTONpull2==0)
    {
    j--;
    }
