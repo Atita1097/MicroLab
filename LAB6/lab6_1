@@ -1,0 +1,20 @@
+#include <ThreeWire.h>  
+#include <RtcDS1302.h>
+#define LED 7
+
+ThreeWire myWire(4,5,2);// IO, SCLK, CE
+RtcDS1302<ThreeWire> Rtc(myWire);
+  
+void setup() 
+{
+    Rtc.Begin();
+    RtcDateTime setting_time(2020,2,2,23,31,10);
+    pinMode(LED, OUTPUT);
+}
+  
+void loop() 
+{
+     RtcDateTime now = Rtc.GetDateTime();
+     digitalWrite(7, now.TotalSeconds()%2);
+     delay(1000);
+}
