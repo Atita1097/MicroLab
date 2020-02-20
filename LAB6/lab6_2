@@ -1,0 +1,81 @@
+//Using RTC1302
+#include <ThreeWire.h>
+#include <RtcDS1302.h>
+#define pinLed 7
+int Sec = 0;
+
+ThreeWire myWire(4,5,2); //IO, CLOCK, CE
+RtcDS1302<ThreeWire>Rtc(myWire);
+
+void setup() 
+  {
+    Serial.begin(9600);
+    Serial.println("Start");
+    Rtc.Begin();
+    RtcDateTime setting_time(2020,2,2,23,31,0);// year, month, dayOfMonth, hour, minute, second
+    Rtc.SetDateTime(setting_time);
+    pinMode(pinLed, OUTPUT);
+  }
+
+
+void loop() 
+{
+  RtcDateTime now = Rtc.GetDateTime();
+  digitalWrite(pinLed,now.TotalSeconds()%2);
+  delay(1000);
+  if(now.Second()%2==0)
+  {
+    digitalWrite(pinLed, HIGH);
+    delay(500);
+    digitalWrite(pinLed, LOW);
+    delay(500);
+    Serial.println(Sec);
+    Sec = Sec+2;
+  }
+  if(Sec == 120)
+  {
+    digitalWrite(pinLed, LOW);
+    delay(500);
+    Serial.print("Stop");
+  }
+}
+
+
+
+//Using Normal Delay
+#define LED 3
+
+int i=0;
+
+void setup()
+{
+  pinMode(LED, OUTPUT);
+  Serial.begin(9600);
+  Serial.println("start");
+}
+
+void loop()
+{
+  	if (i > 120)
+  {
+    digitalWrite(LED, LOW);
+  	delay(1000);
+  }
+	if (i%2 == 0)
+    {    
+  		digitalWrite(LED, HIGH);
+  		delay(1000);
+  		digitalWrite(LED, LOW);
+  		delay(1000);
+      	i = i+2;
+    }
+  if (i == 120)
+  {
+    Serial.println("stop");
+  }
+}
+
+
+//Explaination
+//It's not start and stop at the same time, RTC using little longer than delay, 
+//I think it's because of the delay function that makes it take a lot more time.
