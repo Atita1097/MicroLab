@@ -1,0 +1,67 @@
+#define MOTOR_D1_PIN 5
+#define MOTOR_D2_PIN 6
+#define MOTOR_PWM_PIN 7
+
+int interruptChannelAPin = 2;
+int interruptChannelBPin = 3;
+
+int direction;
+volatile int position;
+
+void setup()
+{
+  pinMode(MOTOR_D1_PIN, OUTPUT);
+  pinMode(MOTOR_D2_PIN, OUTPUT);
+  pinMode(MOTOR_PWM_PIN, OUTPUT);
+ 
+  pinMode(interruptChannelAPin, INPUT_PULLUP);
+  pinMode(interruptChannelBPin, INPUT_PULLUP);
+  
+  attachInterrupt(digitalPinToInterrupt(interruptChannelAPin),
+                 ChannelA_callback, RISING);
+  attachInterrupt(digitalPinToInterrupt(interruptChannelBPin),
+                  ChannelB_callback, RISING);
+  
+  Serial.begin(9600);
+}
+
+void moveForward() {
+  digitalWrite(MOTOR_D1_PIN, HIGH);
+  digitalWrite(MOTOR_D2_PIN, LOW);
+  analogWrite(MOTOR_PWM_PIN, 255);
+}
+ 
+void moveBackward() {
+  digitalWrite(MOTOR_D1_PIN, LOW);
+  digitalWrite(MOTOR_D2_PIN, HIGH);
+  analogWrite(MOTOR_PWM_PIN, 255);
+}
+  
+void loop()
+{
+  moveForward();
+  
+  Serial.print("Position : ");
+  Serial.print(position);
+  
+  Serial.print(" Direction : ");
+  Serial.println(direction);
+
+  delay(500);
+}
+
+void ChannelA_callback() {
+  bool B_callback = digitalRead(interruptChannelBPin);
+  if(B_callback == 0) {
+    direction = 1;
+    position++;
+  }
+}
+
+void ChannelB_callback() {
+  bool A_callback = digitalRead(interruptChannelAPin);
+  if(A_callback == 0) {
+    direction = 0;
+    position--;
+  }
+}
